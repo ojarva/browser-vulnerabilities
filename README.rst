@@ -1,4 +1,22 @@
-Small library for detecting whether user-agent is for outdated browser with vulnerabilities.
+Browser vulnerabilities database
+================================
+
+This small library detects vulnerable operating systems and browsers
+based on browser user-agent string. No active checks are included.
+
+::
+
+  from browser_vulnerabilities import BrowserVulnerability
+
+  bv = BrowserVulnerability('Mozilla/5.0 (Windows NT 6.3; WOW64; rv:26.0) Gecko/20100101 Firefox/26.0')
+  print bv.vulnerabilities() # {'priority': 'mandatory', 'vuln': 'Multiple vulnerabilities', 'name': 'Firefox', 'version__smaller': '26.0'}
+  bv = BrowserVulnerability('Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:27.0) Gecko/20100101 Firefox/27.0')
+  print bv.vulnerabilities() # False
+
+Minimalistic database is available in ``browser_vulnerabilities/data.py`` file.
+
+License
+-------
 
 Licensed under MIT license:
 
