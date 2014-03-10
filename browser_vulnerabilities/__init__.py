@@ -38,13 +38,19 @@ class BrowserVulnerability:
 
             tname = os.get("name")
             tv = os.get("version__smaller")
+            tv_extra = os.get("version__extra")
 
             if os[a] == cname:
                 cversion = parse_version(cv)
                 tversion = parse_version(tv)
                 if cversion is not None and cversion < tversion:
-                    return os
-    
+                    if tv_extra:
+                        if tv_extra.match(cv):
+                            return os
+                    else:
+                        return os
+
+
     def check_browser(self):
         if "browser" not in self.parsed_ua:
             return False
@@ -57,7 +63,6 @@ class BrowserVulnerability:
             if browser.get("version") is not None and parsed_version < tversion:
                 return tbrowser
 
-
 def main():
     uas = [
            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.146 Safari/537.36',
@@ -65,6 +70,8 @@ def main():
            'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0',
            'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:26.0) Gecko/20100101 Firefox/26.0',
            'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0',
+           'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:27.0) Gecko/20100101 Firefox/27.0',
+           'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:27.0) Gecko/20100101 Firefox/27.0',
           ]
     for ua in uas:
         b = BrowserVulnerability(ua)

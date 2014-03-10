@@ -3,3 +3,4 @@ syntax: glob
 build/*
 *.egg-info
 *.pyc
+dist

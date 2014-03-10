@@ -10,7 +10,7 @@ def read(fname):
 
 setup(
     name = "browser_vulnerabilities",
-    version = "0.0.1",
+    version = "0.0.2",
     author = "Olli Jarva",
     author_email = "olli@jarva.fi",
     description = ("Library for detecting vulnerable browsers"),
