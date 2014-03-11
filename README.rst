@@ -8,12 +8,38 @@ based on browser user-agent string. No active checks are included.
 
   from browser_vulnerabilities import BrowserVulnerability
 
-  bv = BrowserVulnerability('Mozilla/5.0 (Windows NT 6.3; WOW64; rv:26.0) Gecko/20100101 Firefox/26.0')
-  print bv.vulnerabilities() # {'priority': 'mandatory', 'vuln': 'Multiple vulnerabilities', 'name': 'Firefox', 'version__smaller': '26.0'}
-  bv = BrowserVulnerability('Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:27.0) Gecko/20100101 Firefox/27.0')
-  print bv.vulnerabilities() # False
+  ua1 = 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:26.0) Gecko/20100101 Firefox/26.0'
+  ua2 = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:27.0) Gecko/20100101 Firefox/27.0'
+  bv = BrowserVulnerability(ua1)
+  print bv.vulnerabilities() 
+  # {'priority': 'recommended', 'readable_version': 'Firefox older than 27.0',
+  # 'name': 'Firefox', 'version__smaller': '27.0'}
+  bv = BrowserVulnerability(ua2)
+  print bv.vulnerabilities()
+  # False
 
-Minimalistic database is available in ``browser_vulnerabilities/data.py`` file.
+Minimal database is available in ``browser_vulnerabilities/data.py`` file. The database is updated manually.
+Order of criteria is important. The most important and most strict criteria should be first. Matching is aborted
+on the first hit.
+
+Mandatory keywords:
+
+- ``platform`` / ``flavor`` / ``name``: first two are for OS, and ``name`` for browser (feature of httpagentparser)
+- ``priority``: 
+
+  * "mandatory" - user action is required, and actions should be either denied or delayed with message.
+  * "recommended" - updating is highly recommended but not mandatory.
+  * "optional" - the warning should be shown to user only when user requests more information.
+
+Optional keywords:
+
+- ``version__smaller``: any version larger than this will not match the rule.
+- ``version__larger``: any version smaller than this will not match the rule.
+- ``version__extra``: compiled ``re`` for additional checks.
+- ``vuln``: link to related website describing the vulnerabilities / why specific update is important.
+- ``readable_name``: user-readable product name
+- ``version``: user-readable version criteria for warnings
+
 
 License
 -------
