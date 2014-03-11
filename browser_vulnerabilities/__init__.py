@@ -10,13 +10,31 @@ class BrowserVulnerability:
         self.ua = ua
         self.parsed_ua = httpagentparser.detect(self.ua)
 
+    @classmethod
+    def get_readable_format(cls, data):
+        readable_name = ""
+        readable_version = ""
+        if "readable_name" in data:
+            readable_name = data["readable_name"]
+        else:
+            for a in ("name", "platform", "flavor"):
+                if a in data:
+                    readable_name = data[a]
+                    break
+        if "version" in data:
+            readable_version = data["version"]
+        elif "version__smaller" in data:
+            readable_version = "older than %s" % data["version__smaller"]
+        data["readable_version"] = "%s %s" % (readable_name, readable_version)
+        return data
+
     def vulnerabilities(self):
         data = self.check_os()
         if data:
-            return data
+            return self.get_readable_format(data)
         data = self.check_browser()
         if data:
-            return data
+            return self.get_readable_format(data)
         return False
 
     @classmethod
